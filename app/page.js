@@ -1,3 +1,4 @@
+import DoctorsList from "@/components/ui/DoctorsList";
 import Hero from "@/components/ui/Hero";
 import Search from "@/components/ui/Search";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,9 @@ export default function Home() {
 
       {/* Search Bar and Category Search */}
       <Search/>
+
+      {/* Doctors List */}
+      <DoctorsList/>
     </>
   );
 }

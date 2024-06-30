@@ -1,8 +1,11 @@
 import React from 'react'
 
-const DoctorsList = () => {
+const DoctorsList = ({doctorList}) => {
   return (
-    <div>DoctorsList</div>
+    <div className='mb-10 p-8'>
+      <h2 className='font-bold text-xl' >DoctorsList</h2>
+      <div></div>
+    </div>
   )
 }
 
