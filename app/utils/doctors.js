@@ -97,7 +97,7 @@ export const doctors = [
       patients: '1300+',
       experience: '9 years',
       speciality: "Psychotropic",
-      image: "/doc8.jpg",
+      image: "/doc8.avif",
       about: 'Specializes in mental health and psychiatric care.',
       time: '8:00 AM - 4:00 PM',
       phone: '555-1920',
