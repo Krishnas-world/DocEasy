@@ -18,7 +18,7 @@ function Search() {
       <div className='grid grid-cols-3  md:grid-cols-4 lg:grid-cols-6'>
         {category.map((item, index) => (
           <div key={index} className='flex flex-col items-center text-center p-5 bg-blue-50 m-2 rounded-lg gap-2 hover:scale-110 transition-all ease-in-out shadow-sm'>
-            <Image src={item.icon} alt='icon' width={40} height={40} />
+            <Image src={item.icon} alt={item.altText} width={40} height={40} />
             <label>{item.description}</label>
           </div>
         ))}
