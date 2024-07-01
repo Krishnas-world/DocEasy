@@ -1,24 +1,20 @@
 import DoctorsList from "@/components/ui/DoctorsList";
 import Hero from "@/components/ui/Hero";
 import Search from "@/components/ui/Search";
+import { getDocs, collection } from 'firebase/firestore';
+import { db } from "../firebaseConfig";
 
 // Fetch data directly in the component
-async function fetchDoctors() {
-  try {
-    const response = await fetch("http://localhost:3000/api/doctors");
-    if (!response.ok) {
-      throw new Error("Failed to fetch");
-    }
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching doctors data:", error);
-    return [];
-  }
-}
 
 export default async function Home() {
-  const doctorList = await fetchDoctors();
+  let doctorList = [];
 
+  try {
+    const querySnapshot = await getDocs(collection(db, 'DoctorsList'));
+    doctorList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Error fetching doctors data:", error);
+  }
   return (
     <>
       {/* Hero Section */}

@@ -1,5 +1,5 @@
 // scripts/uploadDoctors.js
-import { db } from '../firebaseConfig.js';
+import { db } from '../../firebaseConfig.js/index.js';
 import { collection, addDoc } from 'firebase/firestore';
 import { doctors } from '../utils/doctors.js';
 
