@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 
-const DoctorsList = ({ doctorList }) => {
+const DoctorsList = ({ doctorList }) => { 
   return (
     <div className='mb-10 p-8'>
       <h2 className='font-bold text-xl text-center max-sm:text-left'>Popular Doctors</h2>
