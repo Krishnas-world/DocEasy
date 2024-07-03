@@ -4,6 +4,7 @@ import { Button } from './button'
 import { SearchIcon } from 'lucide-react'
 import { category } from '@/app/utils/category'
 import Image from 'next/image'
+import Link from 'next/link'
 
 function Search() {
   return (
@@ -17,10 +18,10 @@ function Search() {
       <br />
       <div className='grid grid-cols-3  md:grid-cols-4 lg:grid-cols-6'>
         {category.map((item, index) => index<6 &&(
-          <div key={index} className='flex flex-col items-center text-center p-5 bg-blue-50 m-2 rounded-lg gap-2 hover:scale-110 transition-all ease-in-out shadow-sm'>
+          <Link href={'/search/'+item.description} key={index} className='flex flex-col items-center text-center p-5 bg-blue-50 m-2 rounded-lg gap-2 hover:scale-110 transition-all ease-in-out shadow-sm'>
             <Image src={item.icon} alt={item.altText} width={40} height={40} />
             <label>{item.description}</label>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

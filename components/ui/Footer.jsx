@@ -35,13 +35,12 @@ function Footer() {
     <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-32">
       <div className="mx-auto max-w-sm lg:max-w-none">
         <p className="mt-4 text-center text-gray-500 lg:text-left lg:text-lg">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Praesentium natus quod eveniet
-          aut perferendis distinctio iusto repudiandae, provident velit earum?
+          DocEasy is here! Follow us on our social media handles to stay updated 
         </p>
 
         <div className="mt-6 flex justify-center gap-4 lg:justify-start">
           <Link
-            className="text-gray-700 transition hover:text-gray-700/75"
+            className="text-gray-700 transition hover:text-blue-600"
             href="#"
             target="_blank"
             rel="noreferrer"
@@ -58,7 +57,7 @@ function Footer() {
           </Link>
 
           <Link
-            className="text-gray-700 transition hover:text-gray-700/75"
+            className="text-gray-700 transition hover:text-blue-600"
             href="#"
             target="_blank"
             rel="noreferrer"
@@ -75,7 +74,7 @@ function Footer() {
           </Link>
 
           <Link
-            className="text-gray-700 transition hover:text-gray-700/75"
+            className="text-gray-700 transition hover:text-blue-600"
             href="#"
             target="_blank"
             rel="noreferrer"
@@ -90,7 +89,7 @@ function Footer() {
           </Link>
 
           <Link
-            className="text-gray-700 transition hover:text-gray-700/75"
+            className="text-gray-700 transition hover:text-blue-600"
             href="#"
             target="_blank"
             rel="noreferrer"
@@ -107,12 +106,12 @@ function Footer() {
           </Link>
 
           <Link
-            className="text-gray-700 transition hover:text-gray-700/75"
+            className="text-gray-700 transition hover:text-blue-600"
             href="#"
             target="_blank"
             rel="noreferrer"
           >
-            <span className="sr-only"> Dribbble </span>
+            <span className="sr-only"> </span>
 
             <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path
@@ -131,24 +130,19 @@ function Footer() {
 
           <ul className="mt-6 space-y-1">
             <li>
-              <Link className="text-gray-700 transition hover:text-gray-700/75" href="#"> Marketing </Link>
+              <Link className="text-gray-700 transition hover:text-blue-600" href="#"> Become a DocEasy Doctor</Link>
             </li>
 
+
             <li>
-              <Link className="text-gray-700 transition hover:text-gray-700/75" href="#">
-                Graphic Design
+              <Link className="text-gray-700 transition hover:text-blue-600" href="#">
+                Diet and Calorie counter
               </Link>
             </li>
 
             <li>
-              <Link className="text-gray-700 transition hover:text-gray-700/75" href="#">
-                App Development
-              </Link>
-            </li>
-
-            <li>
-              <Link className="text-gray-700 transition hover:text-gray-700/75" href="#">
-                Web Development
+              <Link className="text-gray-700 transition hover:text-blue-600" href="#">
+                Find your BMI
               </Link>
             </li>
           </ul>
@@ -159,19 +153,13 @@ function Footer() {
 
           <ul className="mt-6 space-y-1">
             <li>
-              <Link className="text-gray-700 transition hover:text-gray-700/75" href="#"> About </Link>
+              <Link className="text-gray-700 transition hover:text-blue-600" href="#"> About US</Link>
             </li>
 
-            <li>
-              <Link className="text-gray-700 transition hover:text-gray-700/75" href="#"> Careers </Link>
-            </li>
+
 
             <li>
-              <Link className="text-gray-700 transition hover:text-gray-700/75" href="#"> History </Link>
-            </li>
-
-            <li>
-              <Link className="text-gray-700 transition hover:text-gray-700/75" href="#"> Our Team </Link>
+              <Link className="text-gray-700 transition hover:text-blue-600" href="#"> Our Team </Link>
             </li>
           </ul>
         </div>
@@ -181,15 +169,15 @@ function Footer() {
 
           <ul className="mt-6 space-y-1">
             <li>
-              <Link className="text-gray-700 transition hover:text-gray-700/75" href="#"> FAQs </Link>
+              <Link className="text-gray-700 transition hover:text-blue-600" href="#"> FAQs </Link>
             </li>
 
             <li>
-              <Link className="text-gray-700 transition hover:text-gray-700/75" href="#"> Contact </Link>
+              <Link className="text-gray-700 transition hover:text-blue-600" href="#"> Contact </Link>
             </li>
 
             <li>
-              <Link className="text-gray-700 transition hover:text-gray-700/75" href="#"> Live Chat </Link>
+              <Link className="text-gray-700 transition hover:text-blue-600" href="#"> Live Chat </Link>
             </li>
           </ul>
         </div>
@@ -203,7 +191,7 @@ function Footer() {
         <br />
 
         An Initiative taken by 
-        <Link href="https://aetherial.netlify.app/" target='_blank' className="text-blue-600 font-bold transition hover:text-gray-700/75"> AETHERIAL</Link>
+        <Link href="https://aetherial.netlify.app/" target='_blank' className="text-blue-600 font-bold transition hover:text-blue-600"> AETHERIAL</Link>
       </p>
     </div>
   </div>
