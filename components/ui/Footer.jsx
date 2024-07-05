@@ -159,7 +159,7 @@ function Footer() {
 
 
             <li>
-              <Link className="text-gray-700 transition hover:text-blue-600" href="#"> Our Team </Link>
+              <Link className="text-gray-700 transition hover:text-blue-600" href="/team"> Our Team </Link>
             </li>
           </ul>
         </div>
