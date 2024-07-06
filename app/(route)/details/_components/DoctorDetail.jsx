@@ -3,6 +3,7 @@ import { GraduationCap, Instagram, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import BookAppointment from './BookAppointment'
 
 // Skeleton loader component
 const SkeletonLoader = () => (
@@ -92,7 +93,7 @@ const DoctorDetail = ({ doctorData, loading }) => {
               </div>
             </div>
           ))}
-          <Button className='mt-3 rounded-full bg-blue-600 hover:bg-white hover:text-black hover:border border-blue-600'>Book Appointment</Button>
+          <BookAppointment doctorData={doctorData}/>
         </div>
       </div>
       <div className='p-3 border-[1px] rounded-lg mt-5'>
