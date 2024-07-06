@@ -4,14 +4,41 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-const DoctorDetail = ({ doctorData }) => {
+// Skeleton loader component
+const SkeletonLoader = () => (
+  <div className='animate-pulse'>
+    <div className='h-[270px] bg-slate-200 w-full rounded-lg'></div>
+    <div className='mt-5 flex md:px-10 flex-col gap-3'>
+      <div className='h-8 bg-slate-200 w-2/3 rounded-md'></div>
+      <div className='h-6 bg-slate-200 w-1/2 rounded-md mt-2'></div>
+      <div className='h-6 bg-slate-200 w-3/4 rounded-md mt-2'></div>
+      <div className='h-4 bg-slate-200 w-1/3 rounded-md mt-2'></div>
+      <div className='flex gap-2 mt-2'>
+        <div className='h-8 w-8 bg-slate-200 rounded-full'></div>
+        <div className='h-8 w-8 bg-slate-200 rounded-full'></div>
+        <div className='h-8 w-8 bg-slate-200 rounded-full'></div>
+      </div>
+      <Button className='mt-3 rounded-full bg-slate-200 text-transparent hover:bg-slate-300'>Book Appointment</Button>
+    </div>
+    <div className='p-3 border-[1px] rounded-lg mt-5'>
+      <div className='h-6 bg-slate-200 w-1/2 rounded-md'></div>
+      <div className='h-4 bg-slate-200 w-full rounded-md mt-2'></div>
+    </div>
+  </div>
+);
+
+const DoctorDetail = ({ doctorData, loading }) => {
   const socials = [{
     social: {
       linkedin: 'https://www.linkedin.com/in/krishnapallan/',
       github: 'https://github.com/Krishnas-world',
       instagram: 'https://www.instagram.com/krishnasworld._/',
     }
-  }]
+  }];
+
+  if (loading) {
+    return <SkeletonLoader />;
+  }
 
   return (
     <>
@@ -63,7 +90,6 @@ const DoctorDetail = ({ doctorData }) => {
                   </Link>
                 </div>
               </div>
-
             </div>
           ))}
           <Button className='mt-3 rounded-full bg-blue-600 hover:bg-white hover:text-black hover:border border-blue-600'>Book Appointment</Button>
