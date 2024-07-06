@@ -1,5 +1,6 @@
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 import Header from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
@@ -22,6 +23,7 @@ export default async function RootLayout({ children }) {
         <div className="md:px-30">
           <Header user = {user}/>
           {children}
+          <Toaster position="bottom-right" theme="dark" />
           <Footer/>
         </div>
       </body>

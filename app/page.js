@@ -3,6 +3,7 @@ import Hero from "@/components/ui/Hero";
 import Search from "@/components/ui/Search";
 import { getDocs, collection } from 'firebase/firestore';
 import { db } from "../firebaseConfig";
+import Pricing from "@/components/ui/Pricing";
 
 // Fetch data directly in the component
 
@@ -25,6 +26,9 @@ export default async function Home() {
 
       {/* Doctors List */}
       <DoctorsList doctorList={doctorList} />
+
+      {/* Pricing Components */}
+      <Pricing/>
     </>
   );
 }

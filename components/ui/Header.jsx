@@ -39,9 +39,9 @@ function Header({ user }) {
                         <PopoverTrigger><Image src={user.picture} alt='User' width={40} height={40} className='rounded-full' /></PopoverTrigger>
                         <PopoverContent className='w-44'>
                             <ul className='flex flex-col gap-2'>
-                            <li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md'>Profile</li>
+                            <Link href={'/dashboard'}><li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md'>Profile</li></Link>
                             <li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md'>My Bookings</li>
-                            <li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md'><LogoutLink>Logout</LogoutLink></li>
+                            <LogoutLink><li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md'>Logout</li></LogoutLink>
                             </ul>
                         </PopoverContent>
                     </Popover>
