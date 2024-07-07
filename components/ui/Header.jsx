@@ -12,12 +12,12 @@ import {
 
 
 function Header({ user }) {
+    console.log(user);
     const Menu = [
         { id: 1, name: "Home", path: '/' },
         { id: 2, name: "Explore", path: '/explore' },
         { id: 3, name: "Contact Us", path: '/contact' },
     ];
-    console.log(user);
 
     return (
         <div className='flex items-center justify-between p-2 shadow-sm'>
