@@ -20,7 +20,6 @@ const BookAppointment = ({doctorData}) => {
     const [timeslot, setTimeSlot] = useState([]); // Initialize as empty array
     const [selectedTimeSlot, setSelectedTimeSlot] = useState(null); // Initialize as null
     const [notes, setNotes] = useState(''); // New state for text area
-    const {user} = 
     useEffect(() => {
         getTime();
     }, []);
