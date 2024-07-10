@@ -12,7 +12,7 @@ export default function Register({ user }) {
   const [districts, setDistricts] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    email: user.email,
     phone: "",
     extraPhone: "",
     gender: "",
@@ -114,18 +114,17 @@ export default function Register({ user }) {
 
   const handleSave = async (e) => {
     e.preventDefault();
-  
-    // Ensure phone numbers are not the same
+
     if (formData.phone === formData.extraPhone) {
-      return toast.warning("Extra Phone number cannot be same as the primary phone number");
+      return toast.warning("Extra Phone number cannot be same as the primary phone number")
     }
-  
-    // Check if phone number exists only if it's different from the initial phone number and no existing docId
-    if (!docId && formData.phone && formData.phone !== initialPhone && await checkPhoneNumberExists(formData.phone)) {
+
+    // Check if phone number exists only if it's different from the initial phone number
+    if (formData.phone && formData.phone !== initialPhone && await checkPhoneNumberExists(formData.phone)) {
       toast.error("Phone number already exists. Please use a different phone number.");
       return;
     }
-  
+
     try {
       if (docId) {
         // Update existing document
@@ -154,7 +153,6 @@ export default function Register({ user }) {
       toast.error("Failed to save profile.");
     }
   };
-  
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
