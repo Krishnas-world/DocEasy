@@ -15,10 +15,11 @@ import { CalendarHeart, Clock } from 'lucide-react';
 import { isPast, isToday } from 'date-fns';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { db } from '@/firebaseConfig'; // Import the configured Firestore instance
-import { setDoc, doc } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import { toast } from 'sonner';
+import { getUserDataFromSession } from '@/app/utils/session';
 
-const BookAppointment = ({ user, doctorData }) => {
+const BookAppointment = ({ doctorData }) => {
     const [date, setDate] = useState(new Date());
     const [timeslot, setTimeSlot] = useState([]);
     const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
@@ -78,23 +79,27 @@ const BookAppointment = ({ user, doctorData }) => {
         }
     };
 
+    const userData = getUserDataFromSession();
+
     const saveAppointment = async () => {
-        if (!user || !user.email) {
+        if (!userData || !userData.email) {
             toast.error("User is not authenticated or email is missing.");
             return;
         }
 
         const appointmentData = {
-            name: user.displayName || '',
-            email: user.email,
+            name: userData.name,
+            email: userData.email,
             time: selectedTimeSlot,
-            date: date.toISOString().split('T')[0], // save only the date part
+            date: date.toDateString(), // save only the date part
             doctor: doctorData.id,
             note: notes,
         };
 
+        console.log("Saving appointment:", appointmentData); // Add this line to debug
+
         try {
-            await setDoc(doc(db, 'appointments', `${user.email}-${date.toISOString()}-${selectedTimeSlot}`), appointmentData);
+            await addDoc(collection(db, 'appointments'), appointmentData);
             toast.success("Appointment booked successfully!");
         } catch (error) {
             console.error("Error booking appointment:", error);
@@ -123,7 +128,10 @@ const BookAppointment = ({ user, doctorData }) => {
                                     <Calendar
                                         mode="single"
                                         selected={date}
-                                        onSelect={setDate}
+                                        onSelect={(day) => {
+                                            console.log("Selected date:", day); // Add this line to debug
+                                            setDate(day);
+                                        }}
                                         disabled={isPastDay}
                                         className="rounded-md border text-black"
                                         style={{
