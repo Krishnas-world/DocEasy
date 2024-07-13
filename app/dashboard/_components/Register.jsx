@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { db } from '@/firebaseConfig'; // Import the configured Firestore instance
+import { db } from '@/firebaseConfig';
 import { collection, query, where, orderBy, limit, getDocs, doc, setDoc } from 'firebase/firestore';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,7 @@ export default function Register({ user }) {
   const [districts, setDistricts] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
-    email: user.email,
+    email: user.email || "",
     phone: "",
     extraPhone: "",
     gender: "",
@@ -30,8 +30,9 @@ export default function Register({ user }) {
   const [photo, setPhoto] = useState(null);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [initialPhone, setInitialPhone] = useState(""); // Track initial phone number
-  const [docId, setDocId] = useState(''); // Track the document ID
+  const [initialPhone, setInitialPhone] = useState("");
+  const [docId, setDocId] = useState('');
+  const [profileExists, setProfileExists] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -45,8 +46,11 @@ export default function Register({ user }) {
             setPhoto(userDoc.picture);
             setSelectedState(userDoc.state);
             setDistricts(stateDist.states.find(s => s.state === userDoc.state)?.districts || []);
-            setInitialPhone(userDoc.phone); // Set initial phone number
-            setDocId(querySnapshot.docs[0].id); // Store the document ID
+            setInitialPhone(userDoc.phone);
+            setDocId(querySnapshot.docs[0].id);
+            setProfileExists(true); // Profile exists
+          } else {
+            setProfileExists(false); // No profile exists
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -58,7 +62,6 @@ export default function Register({ user }) {
   }, [user]);
 
   useEffect(() => {
-    // Validate form to enable/disable button
     const isFormValid = Object.values(formData).every(value => value !== "") && formData.phone !== formData.extraPhone;
     setIsButtonDisabled(!isFormValid);
   }, [formData]);
@@ -100,43 +103,50 @@ export default function Register({ user }) {
     }
     return "DEasy1";
   };
-
+  
   const checkPhoneNumberExists = async (phone) => {
     const q = query(collection(db, "users"), where("phone", "==", phone));
     const querySnapshot = await getDocs(q);
-    return !querySnapshot.empty;
+    return !querySnapshot.empty; // Returns true if a document with the phone number exists
   };
+  
 
   const handleEdit = () => {
     setIsEditMode(true);
-    setIsButtonDisabled(false); // Enable save button when editing starts
+    setIsButtonDisabled(false);
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
-
+  
+    // Check if the primary phone number is the same as the extra phone number
     if (formData.phone === formData.extraPhone) {
-      return toast.warning("Extra Phone number cannot be same as the primary phone number")
+      return toast.warning("Extra Phone number cannot be the same as the primary phone number");
     }
-
-    // Check if phone number exists only if it's different from the initial phone number
-    if (formData.phone && formData.phone !== initialPhone && await checkPhoneNumberExists(formData.phone)) {
-      toast.error("Phone number already exists. Please use a different phone number.");
-      return;
+  
+    // Check if the primary phone number already exists in the database
+    const phoneExists = await checkPhoneNumberExists(formData.phone);
+  
+    if (phoneExists && formData.phone !== initialPhone) {
+      return toast.warning("Phone number already exists. Please use a different phone number.");
     }
-
+  
     try {
-      if (docId) {
+      console.log('Form Data:', formData);
+      console.log('Profile Exists:', profileExists);
+      console.log('Document ID:', docId);
+  
+      if (profileExists) {
         // Update existing document
         await setDoc(doc(db, "users", docId), {
           ...formData,
           email: user.email,
-          picture: photo || user.picture, // Use updated photo URL
+          picture: photo || user.picture,
           createdAt: new Date(),
         });
         toast.success("Profile updated successfully!");
       } else {
-        // Create a new document if docId doesn't exist
+        // Create a new document if profile doesn't exist
         const newDocName = await getNextDocumentName();
         const newDocRef = doc(db, "users", newDocName);
         await setDoc(newDocRef, {
@@ -147,12 +157,13 @@ export default function Register({ user }) {
         });
         toast.success("Profile saved successfully!");
       }
-      setIsEditMode(false); // Switch back to view mode
+      setIsEditMode(false);
     } catch (error) {
       console.error("Error updating document: ", error);
       toast.error("Failed to save profile.");
     }
   };
+  
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
@@ -193,7 +204,7 @@ export default function Register({ user }) {
           <div>
             <label className="block text-sm font-medium text-muted-foreground">Gender <span className="text-red-500">*</span></label>
             <select name="gender" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" value={formData.gender} onChange={handleChange} disabled={!isEditMode}>
-              <option>Select Gender</option>
+              <option value="">Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
@@ -201,7 +212,7 @@ export default function Register({ user }) {
           </div>
           <div>
             <label className="block text-sm font-medium text-muted-foreground">Date of Birth <span className="text-red-500">*</span></label>
-            <input type="date" required name="dob" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" value={formData.dob} onChange={handleChange} readOnly={!isEditMode} />
+            <input type="date" name="dob" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" value={formData.dob} onChange={handleChange} readOnly={!isEditMode} />
           </div>
           <div>
             <label className="block text-sm font-medium text-muted-foreground">Blood Group <span className="text-red-500">*</span></label>
@@ -211,27 +222,27 @@ export default function Register({ user }) {
               <option value="A-">A-</option>
               <option value="B+">B+</option>
               <option value="B-">B-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
               <option value="O+">O+</option>
               <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-muted-foreground">House/Flat/Block No <span className="text-red-500">*</span></label>
-            <input type="text" required name="house" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="1234" value={formData.house} onChange={handleChange} readOnly={!isEditMode} />
+            <label className="block text-sm font-medium text-muted-foreground">House</label>
+            <input type="text" name="house" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="House No." value={formData.house} onChange={handleChange} readOnly={!isEditMode} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-muted-foreground">Colony/Street/Locality <span className="text-red-500">*</span></label>
-            <input type="text" required name="colony" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="Main St" value={formData.colony} onChange={handleChange} readOnly={!isEditMode} />
+            <label className="block text-sm font-medium text-muted-foreground">Colony</label>
+            <input type="text" name="colony" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="Colony Name" value={formData.colony} onChange={handleChange} readOnly={!isEditMode} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-muted-foreground">City/Village/Town <span className="text-red-500">*</span></label>
-            <input type="text" required name="city" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="City" value={formData.city} onChange={handleChange} readOnly={!isEditMode} />
+            <label className="block text-sm font-medium text-muted-foreground">City <span className="text-red-500">*</span></label>
+            <input type="text" name="city" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="City" value={formData.city} onChange={handleChange} readOnly={!isEditMode} />
           </div>
           <div>
             <label className="block text-sm font-medium text-muted-foreground">State <span className="text-red-500">*</span></label>
-            <select name="state" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" value={formData.state} onChange={handleStateChange} disabled={!isEditMode}>
+            <select name="state" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" value={selectedState} onChange={handleStateChange} disabled={!isEditMode}>
               <option value="">Select State</option>
               {stateDist.states.map((state, index) => (
                 <option key={index} value={state.state}>{state.state}</option>
@@ -249,25 +260,32 @@ export default function Register({ user }) {
           </div>
           <div>
             <label className="block text-sm font-medium text-muted-foreground">Country <span className="text-red-500">*</span></label>
-            <input type="text" required name="country" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="Country" value={formData.country} onChange={handleChange} readOnly />
+            <input type="text" name="country" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="India" value={formData.country} onChange={handleChange} readOnly />
           </div>
           <div>
             <label className="block text-sm font-medium text-muted-foreground">Pincode <span className="text-red-500">*</span></label>
-            <input type="text" required name="pincode" maxLength="6" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="123456" value={formData.pincode} onChange={handleChange} readOnly={!isEditMode} />
+            <input type="text" name="pincode" maxLength="6" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="Pincode" value={formData.pincode} onChange={handleChange} readOnly={!isEditMode} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-muted-foreground">Language <span className="text-red-500">*</span></label>
-            <input type="text" required name="language" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="Language" value={formData.language} onChange={handleChange} readOnly={!isEditMode} />
+            <label className="block text-sm font-medium text-muted-foreground">Language</label>
+            <input type="text" name="language" className="mt-1 block w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring focus:ring-primary" placeholder="Preferred Language" value={formData.language} onChange={handleChange} readOnly={!isEditMode} />
           </div>
         </div>
 
-        {/* Edit and Save Buttons */}
-        <div className="mt-6 flex justify-end space-x-4">
-          {!isEditMode && (
-            <Button type="button" onClick={handleEdit}>Edit</Button>
-          )}
-          {isEditMode && (
-            <Button type="submit" disabled={isButtonDisabled}>Save</Button>
+        <div className="flex space-x-4 mt-6">
+          {!isEditMode ? (
+            <Button type="button" onClick={handleEdit} className="">
+              Edit
+            </Button>
+          ) : (
+            <>
+              <Button type="button" onClick={() => setIsEditMode(false)} className="text-muted">
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isButtonDisabled} className="">
+                Save
+              </Button>
+            </>
           )}
         </div>
       </div>
