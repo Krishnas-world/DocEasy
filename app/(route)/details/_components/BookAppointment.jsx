@@ -47,15 +47,25 @@ const BookAppointment = ({ user, doctorData }) => {
 
     const isPastTimeSlot = (timeSlot) => {
         if (isToday(date)) {
-            const currentHour = new Date().getHours();
-            const [slotHour, slotMinute] = timeSlot.split(':');
-            const slotHourNumber = slotHour.includes('PM') ? parseInt(slotHour) + 12 : parseInt(slotHour);
-            const slotMinuteNumber = slotMinute === '30 AM' || slotMinute === '30 PM' ? 30 : 0;
-            const slotTime = slotHourNumber * 100 + slotMinuteNumber;
+            const currentISTTime = new Date();
+            const istOffset = 5.5 * 60 * 60 * 1000; // IST offset in milliseconds
+            const currentISTDate = new Date(currentISTTime.getTime() + istOffset);
 
-            const currentTime = currentHour * 100 + (new Date().getMinutes() >= 30 ? 30 : 0);
+            const [slotHour, slotMinutePeriod] = timeSlot.split(':');
+            const [slotMinute, period] = slotMinutePeriod.split(' ');
 
-            return slotTime < currentTime;
+            let slotHourNumber = parseInt(slotHour);
+            if (period === 'PM' && slotHourNumber !== 12) {
+                slotHourNumber += 12;
+            } else if (period === 'AM' && slotHourNumber === 12) {
+                slotHourNumber = 0;
+            }
+
+            const slotMinuteNumber = parseInt(slotMinute);
+            const slotTime = new Date(date);
+            slotTime.setHours(slotHourNumber, slotMinuteNumber, 0, 0);
+
+            return slotTime < currentISTDate;
         }
         return false;
     };

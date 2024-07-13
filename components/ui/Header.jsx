@@ -10,7 +10,9 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
-
+const logout = ()=>{
+    sessionStorage.clear();
+}
 function Header({ user }) {
     console.log(user);
     const Menu = [
@@ -41,7 +43,7 @@ function Header({ user }) {
                             <ul className='flex flex-col gap-2'>
                             <Link href={'/dashboard'}><li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md'>Profile</li></Link>
                             <li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md'>My Bookings</li>
-                            <LogoutLink><li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md'>Logout</li></LogoutLink>
+                            <LogoutLink><li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md' onClick={logout}>Logout</li></LogoutLink>
                             </ul>
                         </PopoverContent>
                     </Popover>
