@@ -3,7 +3,7 @@ import CategoryList from './_components/CategoryList'
 
 const layout = ({ children, params }) => {
   return (
-    <div className='grid grid-cols-4'>
+    <div className='grid lg:grid-cols-4 md:grid grid-cols-2'>
       <div className='hidden md:block'> 
       <div>
         {/* Category */}

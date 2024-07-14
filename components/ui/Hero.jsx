@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import { Button } from './button'
+import Link from 'next/link'
 
 function Hero() {
     return (
@@ -25,7 +26,7 @@ function Hero() {
                         Explore a wide range of specialties and find the right care for you.
                         </p>
 
-                        <Button className='mt-10 '>Explore Now!</Button>
+                        <Link href={'/explore'}><Button className='mt-10 '>Explore Now!</Button></Link>
                     </div>
                 </div>
             </div>
