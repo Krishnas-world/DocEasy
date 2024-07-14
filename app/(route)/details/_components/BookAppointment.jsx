@@ -19,6 +19,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { toast } from 'sonner';
 import { getUserDataFromSession } from '@/app/utils/session';
 import sendEmail from '@/app/api/GlobalAPI';
+import { v4 as uuidv4 } from 'uuid'; // Import uuid for generating unique IDs
 
 
 const BookAppointment = ({ doctorData }) => {
@@ -88,8 +89,9 @@ const BookAppointment = ({ doctorData }) => {
             toast.error("User is not authenticated or email is missing.");
             return;
         }
-    
+        const appointmentId = uuidv4(); // Generate a unique ID
         const appointmentData = {
+            id: appointmentId,
             name: userData.name,
             email: userData.email,
             time: selectedTimeSlot,
@@ -106,7 +108,7 @@ const BookAppointment = ({ doctorData }) => {
             const emailResponse = await sendEmail(appointmentData);
             console.log("Email response:", emailResponse); // Debug log
     
-            toast.success("Booking Confirmation Mail Sent Successfully!");
+            toast.success("Booking Confirmed!");
         } catch (error) {
             console.error("Error booking appointment or sending email:", error); // Debug log
             toast.error("Failed to book the appointment or send the email.");

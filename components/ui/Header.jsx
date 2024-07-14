@@ -42,7 +42,7 @@ function Header({ user }) {
                         <PopoverContent className='w-44'>
                             <ul className='flex flex-col gap-2'>
                             <Link href={'/dashboard'}><li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md'>Profile</li></Link>
-                            <li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md'>My Bookings</li>
+                            <Link href={'/my-bookings'}><li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md'>My Bookings</li></Link>
                             <LogoutLink><li className='cursor-pointer hover:bg-slate-200 p-2 rounded-md' onClick={logout}>Logout</li></LogoutLink>
                             </ul>
                         </PopoverContent>
