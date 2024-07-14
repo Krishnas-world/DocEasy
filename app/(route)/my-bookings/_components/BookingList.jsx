@@ -7,10 +7,12 @@ import { doc, deleteDoc, query, where, getDocs, collection } from 'firebase/fire
 import { toast } from 'sonner';
 import Modal from '@/app/utils/modal';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation'; // For navigation
 
 const BookingList = ({ bookingList, doctorList = [], expired, onCancel }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [appointmentToCancel, setAppointmentToCancel] = useState(null);
+    const router = useRouter(); // For navigation
 
     // Create a map to easily access doctor details by their ID
     const doctorMap = doctorList.reduce((map, doctor) => {
@@ -62,6 +64,10 @@ const BookingList = ({ bookingList, doctorList = [], expired, onCancel }) => {
         }
     };
 
+    const handleViewDoctors = () => {
+        router.push('/'); // Redirect to the page where doctors are listed
+    };
+
     return (
         <>
             <Modal
@@ -70,33 +76,42 @@ const BookingList = ({ bookingList, doctorList = [], expired, onCancel }) => {
                 onConfirm={handleConfirmCancel}
                 message="Are you sure you want to cancel this appointment?"
             />
-            <div className='flex flex-wrap gap-6 m-2'>
-                {bookingList.map((item) => {
-                    const doctor = doctorMap[item.doctor];
-                    return (
-                        <div className='flex flex-col sm:flex-row w-full border-[1px] rounded-lg p-3 cursor-pointer hover:border-blue-600 hover:shadow-sm transition-all ease-in-out' key={item.id}>
-                            <div className='flex flex-col justify-center items-center sm:w-1/3'>
-                                {doctor?.image && <Image src={doctor.image} alt={doctor.name || 'doctor'} width={70} height={70} className='h-[70px] object-cover rounded-full border-[2px] border-black' />}
-                                <h2 className='font-bold text-[18px] text-center sm:text-left flex gap-2'>{doctor?.name}</h2>
-                                <h2 className='font-bold text-[18px] text-center sm:text-left flex gap-2'><Phone className='text-blue-600'/>{doctor?.phone}</h2>
-                                <h2 className='font-bold text-[18px] text-center sm:text-left flex gap-2'><MapPin className='text-blue-600'/>{doctor?.address}</h2>
-                            </div>
-                            <div className='flex flex-col justify-center items-center sm:w-2/3 gap-2'>
-                                <div className='flex flex-col items-center sm:items-start gap-2'>
-                                    <h2 className='font-bold text-[16px] flex gap-2'><Calendar className='text-blue-600'/> Appointment on {new Date(item.date).toLocaleDateString()}</h2>
-                                    <h2 className='font-bold text-[16px] flex gap-2'><Clock className='text-blue-600'/> Time: {new Date(item.date).toLocaleTimeString()}</h2>
-                                    <p className='font-medium text-sm'>{item.notes}</p>
-                                    {!expired && (
-                                        <Button onClick={() => handleCancel(item.id)} className='bg-red-500 text-white mt-2'>
-                                            Cancel Appointment
-                                        </Button>
-                                    )}
+            {bookingList.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full p-4 border border-gray-300 rounded-lg shadow-md">
+                    <h2 className="text-xl font-bold mb-4">Make your first booking now</h2>
+                    <Button onClick={handleViewDoctors} className="bg-blue-500 text-white">
+                        View Doctors
+                    </Button>
+                </div>
+            ) : (
+                <div className='flex flex-wrap gap-6 m-2'>
+                    {bookingList.map((item) => {
+                        const doctor = doctorMap[item.doctor];
+                        return (
+                            <div className='flex flex-col sm:flex-row w-full border-[1px] rounded-lg p-3 cursor-pointer hover:border-blue-600 hover:shadow-sm transition-all ease-in-out' key={item.id}>
+                                <div className='flex flex-col justify-center items-center sm:w-1/3'>
+                                    {doctor?.image && <Image src={doctor.image} alt={doctor.name || 'doctor'} width={70} height={70} className='h-[70px] object-cover rounded-full border-[2px] border-black' />}
+                                    <h2 className='font-bold text-[18px] text-center sm:text-left flex gap-2'>{doctor?.name}</h2>
+                                    <h2 className='font-bold text-[18px] text-center sm:text-left flex gap-2'><Phone className='text-blue-600'/>{doctor?.phone}</h2>
+                                    <h2 className='font-bold text-[18px] text-center sm:text-left flex gap-2'><MapPin className='text-blue-600'/>{doctor?.address}</h2>
+                                </div>
+                                <div className='flex flex-col justify-center items-center sm:w-2/3 gap-2'>
+                                    <div className='flex flex-col items-center sm:items-start gap-2'>
+                                        <h2 className='font-bold text-[16px] flex gap-2'><Calendar className='text-blue-600'/> Appointment on {new Date(item.date).toLocaleDateString()}</h2>
+                                        <h2 className='font-bold text-[16px] flex gap-2'><Clock className='text-blue-600'/> Time: {new Date(item.date).toLocaleTimeString()}</h2>
+                                        <p className='font-medium text-sm'>{item.notes}</p>
+                                        {!expired && (
+                                            <Button onClick={() => handleCancel(item.id)} className='bg-red-500 text-white mt-2'>
+                                                Cancel Appointment
+                                            </Button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
-            </div>
+                        );
+                    })}
+                </div>
+            )}
         </>
     );
 };

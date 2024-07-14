@@ -16,7 +16,7 @@ const Modal = ({ isOpen, onClose, onConfirm, message }) => {
                 <div className='mt-4 flex gap-2'>
                     <button
                         type='button'
-                        className='rounded bg-green-50 px-4 py-2 text-sm font-medium text-green-600'
+                        className='rounded bg-red-100 px-4 py-2 text-sm font-medium text-black-600'
                         onClick={onConfirm}
                     >
                         Yes, I'm sure
