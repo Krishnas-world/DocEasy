@@ -18,6 +18,8 @@ import { db } from '@/firebaseConfig'; // Import the configured Firestore instan
 import { addDoc, collection } from 'firebase/firestore';
 import { toast } from 'sonner';
 import { getUserDataFromSession } from '@/app/utils/session';
+import sendEmail from '@/app/api/GlobalAPI';
+
 
 const BookAppointment = ({ doctorData }) => {
     const [date, setDate] = useState(new Date());
@@ -86,7 +88,7 @@ const BookAppointment = ({ doctorData }) => {
             toast.error("User is not authenticated or email is missing.");
             return;
         }
-
+    
         const appointmentData = {
             name: userData.name,
             email: userData.email,
@@ -95,17 +97,22 @@ const BookAppointment = ({ doctorData }) => {
             doctor: doctorData.id,
             note: notes,
         };
-
-        console.log("Saving appointment:", appointmentData); // Add this line to debug
-
+    
+        console.log("Saving appointment:", appointmentData); // Debug log
+    
         try {
             await addDoc(collection(db, 'appointments'), appointmentData);
-            toast.success("Appointment booked successfully!");
+            
+            const emailResponse = await sendEmail(appointmentData);
+            console.log("Email response:", emailResponse); // Debug log
+    
+            toast.success("Booking Confirmation Mail Sent Successfully!");
         } catch (error) {
-            console.error("Error booking appointment:", error);
-            toast.error("Failed to book the appointment.");
+            console.error("Error booking appointment or sending email:", error); // Debug log
+            toast.error("Failed to book the appointment or send the email.");
         }
     };
+    
 
     return (
         <Dialog>
