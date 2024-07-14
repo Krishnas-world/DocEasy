@@ -21,9 +21,8 @@ function Hero() {
                         <h2 className="text-3xl font-bold sm:text-4xl">Find and book an <span className='text-blue-600'>Appointment</span> with your Favourite <span className='text-blue-600'>Doctors</span></h2>
 
                         <p className="mt-4 text-gray-600">
-                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut qui hic atque tenetur quis
-                            eius quos ea neque sunt, accusantium soluta minus veniam tempora deserunt? Molestiae eius
-                            quidem quam repellat.
+                        Discover and book appointments with the best doctors in your area. 
+                        Explore a wide range of specialties and find the right care for you.
                         </p>
 
                         <Button className='mt-10 '>Explore Now!</Button>
